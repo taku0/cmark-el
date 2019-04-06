@@ -1,0 +1,6 @@
+*~
+/.cask/
+*.elc
+/dist/
+cmark-autoloads.el
+cmark-pkg.el
