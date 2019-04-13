@@ -671,11 +671,14 @@ null if no match."
                 (cl-return-from while))
                (t
                 (cl-incf (cmark--InlineParser-pos this))))))
-          (setq res (substring
-                     (cmark--InlineParser-subject this)
-                     savepos
-                     (cmark--InlineParser-pos this)))
-          (cmark--normalizeURI (cmark--unescapeString res)))
+          (if (and (eq (cmark--InlineParser-pos this) savepos)
+                   (not (eq c cmark--C_CLOSE_PAREN)))
+              nil
+            (setq res (substring
+                       (cmark--InlineParser-subject this)
+                       savepos
+                       (cmark--InlineParser-pos this)))
+            (cmark--normalizeURI (cmark--unescapeString res))))
       (cmark--normalizeURI (cmark--unescapeString (substring
                                                    res
                                                    1
@@ -979,7 +982,7 @@ line break otherwise a soft line break."
       (cmark--InlineParser-spnl this)
 
       (setq dest (cmark--InlineParser-parseLinkDestination this))
-      (when (or (null dest) (zerop (length dest)))
+      (when (null dest)
         (setf (cmark--InlineParser-pos this) startpos)
         (cl-return 0))
 
