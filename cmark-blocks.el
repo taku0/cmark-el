@@ -776,22 +776,40 @@ and 2 for \"we've dealt with this line completely, go to next.\"")
              (let ((match-string (match-string 0 current-line-after-spaces))
                    heading)
                (cmark--Parser-closeUnmatchedBlocks parser)
-               (setq heading (cmark-create-Node
-                              "heading"
-                              (cmark-Node-sourcepos container)))
-               (setf (cmark-Node-level heading)
-                     (if (equal (cmark--charAt match-string 0) "=") 1 2))
-               (setf (cmark-Node-_string_content heading)
-                     (cmark-Node-_string_content container))
-               (cmark-Node-insertAfter container heading)
-               (cmark-Node-unlink container)
-               (setf (cmark-Parser-tip parser) heading)
-               (cmark--Parser-advanceOffset
-                parser
-                (- (length (cmark-Parser-currentLine parser))
-                   (cmark-Parser-offset parser))
-                nil)
-               2))
+               ;; resolve reference link definitiosn
+               (let (pos)
+                 (while (and (eq (cmark--peek
+                                  (cmark-Node-_string_content container)
+                                  0)
+                                 cmark--C_OPEN_BRACKET)
+                             (not
+                              (zerop
+                               (setq pos (cmark--InlineParser-parseReference
+                                          (cmark-Parser-inlineParser parser)
+                                          (cmark-Node-_string_content container)
+                                          (cmark-Parser-refmap parser))))))
+                   (setf (cmark-Node-_string_content container)
+                         (substring (cmark-Node-_string_content container)
+                                    pos))))
+               (if (> (length (cmark-Node-_string_content container)) 0)
+                   (progn
+                     (setq heading (cmark-create-Node
+                                    "heading"
+                                    (cmark-Node-sourcepos container)))
+                     (setf (cmark-Node-level heading)
+                           (if (equal (cmark--charAt match-string 0) "=") 1 2))
+                     (setf (cmark-Node-_string_content heading)
+                           (cmark-Node-_string_content container))
+                     (cmark-Node-insertAfter container heading)
+                     (cmark-Node-unlink container)
+                     (setf (cmark-Parser-tip parser) heading)
+                     (cmark--Parser-advanceOffset
+                      parser
+                      (- (length (cmark-Parser-currentLine parser))
+                         (cmark-Parser-offset parser))
+                      nil)
+                     2)
+                 0)))
          0)))
 
    ;; thematic break
