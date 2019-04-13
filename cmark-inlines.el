@@ -511,6 +511,7 @@ function for strong/emph parsing."
             (setq odd_match
                   (and (or (cmark--delimiters-can_open closer)
                            (cmark--delimiters-can_close opener))
+                       (not (zerop (% (cmark--delimiters-origdelims closer) 3)))
                        (zerop (% (+
                                   (cmark--delimiters-origdelims opener)
                                   (cmark--delimiters-origdelims closer))
