@@ -146,7 +146,7 @@
                         (cmark--HtmlRenderer-esc
                          this
                          (cmark-Node-destination node)
-                         t))
+                         nil))
                   attrs))
           (when (and (cmark-Node-title node)
                      (not (equal (cmark-Node-title node) "")))
@@ -154,7 +154,7 @@
                         (cmark--HtmlRenderer-esc
                          this
                          (cmark-Node-title node)
-                         t))
+                         nil))
                   attrs))
           (cmark--HtmlRenderer-tag this "a" (reverse attrs)))
       (cmark--HtmlRenderer-tag this "/a"))))
@@ -171,7 +171,7 @@
              this
              (concat
               "<img src=\""
-              (cmark--HtmlRenderer-esc this (cmark-Node-destination node) t)
+              (cmark--HtmlRenderer-esc this (cmark-Node-destination node) nil)
               "\" alt=\""))))
         (cl-incf (cmark-HtmlRenderer-disableTags this)))
     (cl-decf (cmark-HtmlRenderer-disableTags this))
@@ -182,7 +182,7 @@
          this
          (concat
           "\" title=\""
-          (cmark--HtmlRenderer-esc this (cmark-Node-title node) t))))
+          (cmark--HtmlRenderer-esc this (cmark-Node-title node) nil))))
       (cmark--HtmlRenderer-lit this "\" />"))))
 
 (defun cmark--HtmlRenderer-emph (this node entering)
@@ -232,7 +232,7 @@
                (> (length (car info_words)) 0))
       (push (cons "class"
                   (concat "language-"
-                          (cmark--HtmlRenderer-esc this (car info_words) t)))
+                          (cmark--HtmlRenderer-esc this (car info_words) nil)))
             attrs))
     (cmark--HtmlRenderer-cr this)
     (cmark--HtmlRenderer-tag this "pre")
