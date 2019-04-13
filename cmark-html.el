@@ -341,8 +341,8 @@
 (defalias 'cmark--HtmlRenderer-lit 'cmark--Renderer-lit)
 (defalias 'cmark--HtmlRenderer-cr 'cmark--Renderer-cr)
 
-(defun cmark--HtmlRenderer-esc (_this s preserve_entities)
-  (cmark--escapeXml s preserve_entities))
+(defun cmark--HtmlRenderer-esc (_this s _preserve_entities)
+  (cmark--escapeXml s))
 
 (provide 'cmark-html)
 

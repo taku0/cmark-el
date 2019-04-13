@@ -146,13 +146,6 @@
 
 (defconst cmark--reXmlSpecial cmark--XMLSPECIAL)
 
-(defconst cmark--reXmlSpecialOrEntity
-  (list (concat
-         cmark--ENTITY
-         "\\|"
-         cmark--XMLSPECIAL)
-        :ignore-case))
-
 (defun cmark--unescapeChar (s)
   (if (eq (elt s 0) cmark--C_BACKSLASH)
       (cmark--charAt s 1)
@@ -175,17 +168,12 @@
    ((equal s "\"") "&quot;")
    (t s)))
 
-(defun cmark--escapeXml (s preserve_entities)
+(defun cmark--escapeXml (s)
   (if (cmark--string-match cmark--reXmlSpecial s)
-      (if preserve_entities
-          (cmark--replaceAll
-           cmark--reXmlSpecialOrEntity
-           #'cmark--replaceUnsafeChar
-           s)
-        (cmark--replaceAll
-         cmark--reXmlSpecial
-         #'cmark--replaceUnsafeChar
-         s))
+      (cmark--replaceAll
+       cmark--reXmlSpecial
+       #'cmark--replaceUnsafeChar
+       s)
     s))
 
 (provide 'cmark-common)
