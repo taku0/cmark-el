@@ -637,7 +637,8 @@ null if no match."
         openparens
         c)
     (if (null res)
-        (progn
+        (if (eq (cmark--InlineParser-peek this) cmark--C_LESSTHAN)
+            nil
           ;; TODO handrolled parser; res should be null or the string
           (setq savepos (cmark--InlineParser-pos this))
           (setq openparens 0)
