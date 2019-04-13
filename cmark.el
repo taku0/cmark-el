@@ -44,21 +44,41 @@
 ;;
 ;; Usage:
 ;;
-;; (let* ((parser (cmark-create-Parser))
-;;        (root (cmark-parser-parse parser source-string))
+;; (let* ((root (cmark-parse source-string))
 ;;        (walker (cmark-create-Node-walker root))
-;;        (renderer (cmark-create-HtmlRenderer))
 ;;        event)
 ;;   (while (setq event (cmark--NodeWalker-next walker))
 ;;     (prin1 (cmark-event-entering event))
 ;;     (prin1 (cmark-Node-type (cmark-event-node event))))
-;;   (princ (cmark-HtmlRenderer-render root)))
-;;
-;; To generate HTML, require cmark-html.
+;;   (princ (cmark-render-html root)))
 
 ;;; Code:
 
 (require 'cmark-blocks)
+(require 'cmark-html)
+
+(defun cmark-parse (source &rest options)
+  "Parse CommonMark SOURCE then return the root Node.
+
+OPTIONS are keyword arguments:
+:smart SMART -- if SMART is non-nil, punctuations are handled smart.
+:time TIME -- IF TIME is non-nil, dump time to parse."
+  (cmark-Parser-parse
+   (cmark-create-Parser (apply #'make-cmark-options options))
+   source))
+
+(defun cmark-render-html (document &rest options)
+  "Convert DOCUMENT to a HTML string.
+
+OPTIONS are keyword arguments:
+
+:softbreak SOFTBREAK -- SOFTBREAK is a string to render softbreaks.
+:safe SAFE -- if SAFE is non-nil, elimitate unsafe contents.
+:sourcepos SOURCEPOS -- if SOURCEPOS is non-nil, embed source positions in
+                        `data-sourcepos' attribute."
+  (cmark-HtmlRenderer-render
+   (cmark-create-HtmlRenderer (apply #'make-cmark-HtmlRenderer-options options))
+   document))
 
 (provide 'cmark)
 

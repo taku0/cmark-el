@@ -50,7 +50,6 @@
 ;;; Code
 
 (require 'cmark)
-(require 'cmark-html)
 
 (defvar cmark--test-basedir
   (file-name-directory (or load-file-name buffer-file-name)))
