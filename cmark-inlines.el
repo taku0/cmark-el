@@ -260,6 +260,7 @@ literal sequence of backticks."
                             (- pos (length ticks)))))
           (if (and
                (> (length contents) 0)
+               (cmark--string-match "[^ ]" contents)
                (eq ?\s (elt contents 0))
                (eq ?\s (elt contents (1- (length contents)))))
               (setf (cmark-Node-_literal node)
