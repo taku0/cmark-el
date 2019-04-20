@@ -202,7 +202,7 @@ See [LICENSE][] for details. Copyright (C) 2019 taku0 and original
 
 [badge-license]: https://img.shields.io/badge/license-BSD--2--Clause-green.svg
 [badge-travis]: https://travis-ci.org/taku0/cmark.png?branch=master
-[travis]: https://travis-ci.org/taku0/cmark
+[travis]: https://travis-ci.org/taku0/cmark-el
 [LICENSE]: ./LICENSE
 [commonmark.js]: https://github.com/commonmark/commonmark.js/
 [releases]: https://github.com/taku0/cmark/releases
