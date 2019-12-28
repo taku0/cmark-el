@@ -675,14 +675,20 @@ null if no match."
                 (cl-return-from while))
                (t
                 (cl-incf (cmark--InlineParser-pos this))))))
-          (if (and (eq (cmark--InlineParser-pos this) savepos)
-                   (not (eq c cmark--C_CLOSE_PAREN)))
-              nil
+          (cond
+           ((and (eq (cmark--InlineParser-pos this) savepos)
+                 (not (eq c cmark--C_CLOSE_PAREN)))
+            nil)
+
+           ((not (zerop openparens))
+            nil)
+
+           (t
             (setq res (substring
                        (cmark--InlineParser-subject this)
                        savepos
                        (cmark--InlineParser-pos this)))
-            (cmark--normalizeURI (cmark--unescapeString res))))
+            (cmark--normalizeURI (cmark--unescapeString res)))))
       (cmark--normalizeURI (cmark--unescapeString (substring
                                                    res
                                                    1
