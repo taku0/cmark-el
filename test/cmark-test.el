@@ -298,7 +298,7 @@ Otherwise, MESSAGE is appended to the ERROR-BUFFER."
      results
      (lambda (z)
        (cmark-HtmlRenderer-render writer
-                                   (cmark-Parser-parse readerSmart z))))
+                                  (cmark-Parser-parse readerSmart z))))
 
     (cmark--specTests
      error-buffer
