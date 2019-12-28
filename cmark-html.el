@@ -145,16 +145,14 @@
             (push (cons "href"
                         (cmark--HtmlRenderer-esc
                          this
-                         (cmark-Node-destination node)
-                         nil))
+                         (cmark-Node-destination node)))
                   attrs))
           (when (and (cmark-Node-title node)
                      (not (equal (cmark-Node-title node) "")))
             (push (cons "title"
                         (cmark--HtmlRenderer-esc
                          this
-                         (cmark-Node-title node)
-                         nil))
+                         (cmark-Node-title node)))
                   attrs))
           (cmark--HtmlRenderer-tag this "a" (reverse attrs)))
       (cmark--HtmlRenderer-tag this "/a"))))
@@ -171,7 +169,7 @@
              this
              (concat
               "<img src=\""
-              (cmark--HtmlRenderer-esc this (cmark-Node-destination node) nil)
+              (cmark--HtmlRenderer-esc this (cmark-Node-destination node))
               "\" alt=\""))))
         (cl-incf (cmark-HtmlRenderer-disableTags this)))
     (cl-decf (cmark-HtmlRenderer-disableTags this))
@@ -182,7 +180,7 @@
          this
          (concat
           "\" title=\""
-          (cmark--HtmlRenderer-esc this (cmark-Node-title node) nil))))
+          (cmark--HtmlRenderer-esc this (cmark-Node-title node)))))
       (cmark--HtmlRenderer-lit this "\" />"))))
 
 (defun cmark--HtmlRenderer-emph (this node entering)
@@ -232,7 +230,7 @@
                (> (length (car info_words)) 0))
       (push (cons "class"
                   (concat "language-"
-                          (cmark--HtmlRenderer-esc this (car info_words) nil)))
+                          (cmark--HtmlRenderer-esc this (car info_words))))
             attrs))
     (cmark--HtmlRenderer-cr this)
     (cmark--HtmlRenderer-tag this "pre")
@@ -316,7 +314,7 @@
 ;;; Helper methods
 
 (defun cmark--HtmlRenderer-out (this s)
-  (cmark--HtmlRenderer-lit this (cmark--HtmlRenderer-esc this s nil)))
+  (cmark--HtmlRenderer-lit this (cmark--HtmlRenderer-esc this s)))
 
 (defun cmark--HtmlRenderer-attrs (this node)
   (let ((att '())
@@ -341,7 +339,7 @@
 (defalias 'cmark--HtmlRenderer-lit 'cmark--Renderer-lit)
 (defalias 'cmark--HtmlRenderer-cr 'cmark--Renderer-cr)
 
-(defun cmark--HtmlRenderer-esc (_this s _preserve_entities)
+(defun cmark--HtmlRenderer-esc (_this s)
   (cmark--escapeXml s))
 
 (provide 'cmark-html)
