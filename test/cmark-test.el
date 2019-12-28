@@ -379,6 +379,18 @@ Otherwise, MESSAGE is appended to the ERROR-BUFFER."
            (make-cmark--pathologicalTest
             :name (concat
                    (number-to-string x)
+                   " #172")
+            :input (cmark--repeat "*_* _ " x)
+            :expected (concat "<p>" (cmark--repeat "<em>_</em> _ " (1- x)) "<em>_</em> _</p>\n"))
+           cases)
+          (setq x (* 10 x))))
+
+      (let ((x 1000))
+        (while (<= x 10000)
+          (push
+           (make-cmark--pathologicalTest
+            :name (concat
+                   (number-to-string x)
                    " link closers with no openers")
             :input (cmark--repeat "a] " x)
             :expected (concat "<p>" (cmark--repeat "a] " (1- x)) "a]</p>\n"))
