@@ -434,24 +434,27 @@ function for strong/emph parsing."
                                   (cmark--InlineParser-pos this)))))
       (setq node (cmark--text contents))
       (cmark-Node-appendChild block node)
-      (setf (cmark--InlineParser-delimiters this)
-            (make-cmark--delimiters
-             :cc cc
-             :numdelims numdelims
-             :origdelims numdelims
-             :node node
-             :previous (cmark--InlineParser-delimiters this)
-             :next nil
-             :can_open (cmark--delimiters-can_open res)
-             :can_close (cmark--delimiters-can_close res)))
-      (when (not
-             (null
-              (cmark--delimiters-previous
-               (cmark--InlineParser-delimiters this))))
-        (setf (cmark--delimiters-next
-               (cmark--delimiters-previous
-                (cmark--InlineParser-delimiters this)))
-              (cmark--InlineParser-delimiters this))))
+      ;; Add entry to stack for this opener
+      (when (or (cmark--delimiters-can_open res)
+                (cmark--delimiters-can_close res))
+        (setf (cmark--InlineParser-delimiters this)
+              (make-cmark--delimiters
+               :cc cc
+               :numdelims numdelims
+               :origdelims numdelims
+               :node node
+               :previous (cmark--InlineParser-delimiters this)
+               :next nil
+               :can_open (cmark--delimiters-can_open res)
+               :can_close (cmark--delimiters-can_close res)))
+        (when (not
+               (null
+                (cmark--delimiters-previous
+                 (cmark--InlineParser-delimiters this))))
+          (setf (cmark--delimiters-next
+                 (cmark--delimiters-previous
+                  (cmark--InlineParser-delimiters this)))
+                (cmark--InlineParser-delimiters this)))))
     t))
 
 (defun cmark--InlineParser-removeDelimiter (this delim)
