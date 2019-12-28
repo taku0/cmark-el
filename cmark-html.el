@@ -84,7 +84,7 @@
     (puthash "custom_block" #'cmark--HtmlRenderer-custom_block handlers)
     handlers))
 
-(cl-defstruct (cmark-HtmlRenderer (:include cmark--Renderer))
+(cl-defstruct (cmark-HtmlRenderer (:include cmark-Renderer))
   disableTags
   options)
 
@@ -337,7 +337,7 @@
               att)))
     att))
 
-(defalias 'cmark-HtmlRenderer-render 'cmark--Renderer-render)
+(defalias 'cmark-HtmlRenderer-render 'cmark-Renderer-render)
 (defalias 'cmark--HtmlRenderer-lit 'cmark--Renderer-lit)
 (defalias 'cmark--HtmlRenderer-cr 'cmark--Renderer-cr)
 

@@ -40,40 +40,40 @@
 
 ;;; Code
 
-(cl-defstruct cmark--Renderer
+(cl-defstruct cmark-Renderer
   buffer
   lastOut
   handlers)
 
-(defun cmark--Renderer-render (this ast)
+(defun cmark-Renderer-render (this ast)
   "Walks the AST and calls member methods for each Node type.
 
 AST: The root of the abstract syntax tree."
   (let ((walker (cmark-Node-walker ast))
         event
         type)
-    (setf (cmark--Renderer-buffer this) "")
-    (setf (cmark--Renderer-lastOut this) "\n")
+    (setf (cmark-Renderer-buffer this) "")
+    (setf (cmark-Renderer-lastOut this) "\n")
 
     (while (setq event (cmark-NodeWalker-next walker))
       (setq type (cmark-Node-type (cmark-event-node event)))
-      (when (gethash type (cmark--Renderer-handlers this))
-        (funcall (gethash type (cmark--Renderer-handlers this))
+      (when (gethash type (cmark-Renderer-handlers this))
+        (funcall (gethash type (cmark-Renderer-handlers this))
                  this
                  (cmark-event-node event)
                  (cmark-event-entering event))))
-    (cmark--Renderer-buffer this)))
+    (cmark-Renderer-buffer this)))
 
 (defun cmark--Renderer-lit (this str)
   "Concatenate a literal string to the buffer.
 
 STR: The string to concatenate."
-  (cl-callf concat (cmark--Renderer-buffer this) str)
-  (setf (cmark--Renderer-lastOut this) str))
+  (cl-callf concat (cmark-Renderer-buffer this) str)
+  (setf (cmark-Renderer-lastOut this) str))
 
 (defun cmark--Renderer-cr (this)
   "Output a newline to the buffer."
-  (when (not (equal (cmark--Renderer-lastOut this) "\n"))
+  (when (not (equal (cmark-Renderer-lastOut this) "\n"))
     (cmark--Renderer-lit this "\n")))
 
 (defun cmark--Renderer-out (this str)
