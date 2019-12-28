@@ -602,10 +602,6 @@ function for strong/emph parsing."
           (setq closer (cmark--delimiters-next closer))))
         (when (and (not opener_found) (not odd_match))
           ;; Set lower bound for future searches for openers:
-          ;; We don't do this with odd_match because a **
-          ;; that doesn't match an earlier * might turn into
-          ;; an opener, and the * might be matched by something
-          ;; else.
           (puthash closercc
                    (cmark--delimiters-previous old_closer)
                    openers_bottom)
