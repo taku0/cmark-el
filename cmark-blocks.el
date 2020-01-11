@@ -529,7 +529,9 @@ in agglomerating list items into lists."
                 (progn
                   ;; closing fence - we're at end of line, so we can return
                   (setf (cmark-Parser-lastLineLength parser)
-                        (length (match-string 0 subln)))
+                        (+ (cmark-Parser-offset parser)
+                           indent
+                           (length (match-string 0 subln))))
                   (cmark--Parser-finalize parser
                                           container
                                           (cmark-Parser-lineNumber parser))
