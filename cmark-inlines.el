@@ -44,7 +44,6 @@
 
 (require 'cmark-node)
 (require 'cmark-common)
-(require 'cmark-normalize-reference)
 (require 'cmark-from-code-point)
 (require 'cmark-entities)
 
@@ -151,6 +150,18 @@
   (let ((node (cmark-create-Node "text")))
     (setf (cmark-Node-_literal node) s)
     node))
+
+
+;; normalize a reference in reference link (remove []s, trim,
+;; collapse internal space, unicode case fold.
+;; See commonmark/commonmark.js#168.
+(defun cmark--normalizeReference (string)
+  (upcase
+   (downcase
+    (cmark--replaceAll
+     "[ \t\r\n]+"
+     " "
+     (cmark--trim (substring string 1 (1- (length string))))))))
 
 ;;; INLINE PARSER
 
