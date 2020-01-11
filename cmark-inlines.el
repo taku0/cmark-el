@@ -134,8 +134,6 @@
 
 (defconst cmark--reWhitespaceChar "\\`[ \t\n\x0b\x0c\x0d]")
 
-(defconst cmark--reWhitespace "[ \t\n\x0b\x0c\x0d]+")
-
 (defconst cmark--reUnicodeWhitespaceChar (concat "\\`" cmark--SPACE))
 
 (defconst cmark--reFinalSpace " *$")
