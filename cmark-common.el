@@ -44,7 +44,6 @@
 (require 'cmark-compat)
 
 (require 'cmark-mdurl-encode)
-(require 'cmark-mdurl-decode)
 
 (defconst cmark--C_BACKSLASH ?\\)
 
