@@ -528,6 +528,8 @@ in agglomerating list items into lists."
                          (cmark-Node-_fenceLength container)))
                 (progn
                   ;; closing fence - we're at end of line, so we can return
+                  (setf (cmark-Parser-lastLineLength parser)
+                        (length (match-string 0 subln)))
                   (cmark--Parser-finalize parser
                                           container
                                           (cmark-Parser-lineNumber parser))
@@ -997,7 +999,6 @@ then finalizing the document."
             (1 ;; we've failed to match a block
              (setq all_matched nil))
             (2 ;; we've hit end of line for fenced code close and can return
-             (setf (cmark-Parser-lastLineLength this) (length ln))
              (cl-return))
             (t
              (error "continue returned illegal value, must be 0, 1, or 2")))
@@ -1102,6 +1103,7 @@ then finalizing the document."
                            (cmark-Node-_htmlBlockType container))
                       (substring (cmark-Parser-currentLine this)
                                  (cmark-Parser-offset this))))
+            (setf (cmark-Parser-lastLineLength this) (length ln))
             (cmark--Parser-finalize this
                                     container
                                     (cmark-Parser-lineNumber this))))
