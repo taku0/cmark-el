@@ -158,7 +158,7 @@
     s))
 
 (defun cmark--normalizeURI (uri)
-  (or (cmark--encode (cmark--decode uri)) uri))
+  (or (cmark--encode uri) uri))
 
 (defun cmark--replaceUnsafeChar (s)
   (cond
