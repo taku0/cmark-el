@@ -3,7 +3,7 @@
 ;; Copyright (C) 2019 taku0
 
 ;; Author: taku0 (http://github.com/taku0)
-;; Version: 0.30.0
+;; Version: 0.29.2
 ;; Package-Requires: ((emacs "24.4"))
 ;; Keywords: convenience
 ;; URL: https://github.com/taku0/cmark-el
