@@ -448,8 +448,8 @@ function for strong/emph parsing."
              (or (cmark--delimiters-can_open res)
                  (cmark--delimiters-can_close res))
              (or (cmark-options-smart (cmark--InlineParser-options this))
-                 (not (eq cc cmark--C_SINGLEQUOTE))
-                 (not (eq cc cmark--C_DOUBLEQUOTE))))
+                 (and (not (eq cc cmark--C_SINGLEQUOTE))
+                      (not (eq cc cmark--C_DOUBLEQUOTE)))))
         (setf (cmark--InlineParser-delimiters this)
               (make-cmark--delimiters
                :cc cc
