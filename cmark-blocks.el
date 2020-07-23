@@ -98,7 +98,7 @@
    "." ;; dummy for 0
    (list (concat "\\`"
                  "<"
-                 "\\(?:script\\|pre\\|style\\)"
+                 "\\(?:script\\|pre\\|textarea\\|style\\)"
                  "\\(?:"
                  cmark--SPACE
                  "\\|"
@@ -138,7 +138,7 @@
 (defconst cmark--reHtmlBlockClose
   (list
    "." ;; dummy for 0
-   (list "<\\/\\(?:script\\|pre\\|style\\)>" :ignore-case)
+   (list "<\\/\\(?:script\\|pre\\|textarea\\|style\\)>" :ignore-case)
    "-->"
    "\\?>"
    ">"
