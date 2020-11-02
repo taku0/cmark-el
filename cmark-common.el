@@ -99,7 +99,13 @@
    "*[>]"))
 (defconst cmark--HTMLCOMMENT
   "<!---->\\|<!--\\(?:-?[^>-]\\)\\(?:-?[^-]\\)*-->")
-(defconst cmark--PROCESSINGINSTRUCTION "[<][?].*?[?][>]")
+(defconst cmark--PROCESSINGINSTRUCTION
+  (concat
+   "[<][?]\\(?:"
+   cmark--SPACE
+   "\\|"
+   cmark--NONSPACE
+   "\\)*?[?][>]"))
 (defconst cmark--DECLARATION
   (concat
    "<![A-Z]+"
