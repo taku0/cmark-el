@@ -281,7 +281,7 @@ start, delimiter, bullet character, padding) or nil."
               (cmark--charAt (match-string 0 rest) 0)))
        ((and (cmark--string-match cmark--reOrderedListMarker rest)
              (or (not (equal (cmark-Node-type container) "paragraph"))
-                 (equal (match-string 1 rest) "1")))
+                 (eq (string-to-number (match-string 1 rest)) 1)))
         (setf (cmark--listMarker-type data) "ordered")
         (setf (cmark--listMarker-start data)
               (string-to-number (match-string 1 rest)))
