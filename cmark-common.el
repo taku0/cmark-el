@@ -133,7 +133,7 @@
    "\\|"
    cmark--CDATA
    "\\)"))
-(defconst cmark--reHtmlTag (list (concat "\\`" cmark--HTMLTAG) :ignore-case))
+(defconst cmark--reHtmlTag (concat "\\`" cmark--HTMLTAG))
 
 (defconst cmark--reBackslashOrAmp "[\\&]")
 
