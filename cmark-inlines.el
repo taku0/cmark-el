@@ -141,7 +141,8 @@
 
 (defconst cmark--reSpaceAtEndOfLine "\\` *\\(\\'\\|\n\\)")
 
-(defconst cmark--reLinkLabel "\\`\\[\\(?:[^][\\\\]\\|\\\\.\\)\\{0,1000\\}\\]")
+;; [^z-a] is "any char including newline".
+(defconst cmark--reLinkLabel "\\`\\[\\(?:[^][\\]\\|\\\\[^z-a]\\)\\{0,1000\\}]")
 
 ;; Matches a string of non-special characters.
 (defconst cmark--reMain "^[^][\n`\\\\!<&*_'\"]+")
