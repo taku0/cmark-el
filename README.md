@@ -57,9 +57,8 @@ Here's a basic usage example:
   be replaced with empty strings.
 - `softbreak`: specify raw string to be used for a softbreak.
 - `esc`: specify a function to be used to escape strings.  Its
-  first argument is the string to be escaped, the second argument
-  is a boolean indicating whether to preserves entities in that
-  string.
+  argument is the string.
+
 
 For example, to make soft breaks render as hard breaks in HTML:
 

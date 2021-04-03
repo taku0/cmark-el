@@ -59,7 +59,8 @@
 (cl-defstruct cmark-HtmlRenderer-options
   softbreak
   safe
-  sourcepos)
+  sourcepos
+  esc)
 
 (defconst cmark--HtmlRenderer-handlers
   (let ((handlers (make-hash-table :test 'equal)))
@@ -86,7 +87,8 @@
 
 (cl-defstruct (cmark-HtmlRenderer (:include cmark-Renderer))
   disableTags
-  options)
+  options
+  esc)
 
 (defun cmark-create-HtmlRenderer (&optional options)
   (let ((this (make-cmark-HtmlRenderer)))
@@ -95,6 +97,10 @@
     (cl-callf or (cmark-HtmlRenderer-options-softbreak options) "\n")
     ;; set to "<br />" to make them hard breaks
     ;; set to " " if you want to ignore line wrapping in source
+    (setf (cmark-HtmlRenderer-esc this)
+          (or (cmark-HtmlRenderer-options-esc options) #'cmark--escapeXml))
+    ;; escape html with a custom function
+    ;; else use escapeXml
 
     (setf (cmark-HtmlRenderer-disableTags this) 0)
     (setf (cmark-HtmlRenderer-lastOut this) "\n")
@@ -143,16 +149,14 @@
                       (cmark--potentiallyUnsafe
                        (cmark-Node-destination node))))
             (push (cons "href"
-                        (cmark--HtmlRenderer-esc
-                         this
-                         (cmark-Node-destination node)))
+                        (funcall (cmark-HtmlRenderer-esc this)
+                                 (cmark-Node-destination node)))
                   attrs))
           (when (and (cmark-Node-title node)
                      (not (equal (cmark-Node-title node) "")))
             (push (cons "title"
-                        (cmark--HtmlRenderer-esc
-                         this
-                         (cmark-Node-title node)))
+                        (funcall (cmark-HtmlRenderer-esc this)
+                                 (cmark-Node-title node)))
                   attrs))
           (cmark--HtmlRenderer-tag this "a" (reverse attrs)))
       (cmark--HtmlRenderer-tag this "/a"))))
@@ -169,7 +173,8 @@
              this
              (concat
               "<img src=\""
-              (cmark--HtmlRenderer-esc this (cmark-Node-destination node))
+              (funcall (cmark-HtmlRenderer-esc this)
+                       (cmark-Node-destination node))
               "\" alt=\""))))
         (cl-incf (cmark-HtmlRenderer-disableTags this)))
     (cl-decf (cmark-HtmlRenderer-disableTags this))
@@ -180,7 +185,8 @@
          this
          (concat
           "\" title=\""
-          (cmark--HtmlRenderer-esc this (cmark-Node-title node)))))
+          (funcall (cmark-HtmlRenderer-esc this)
+                   (cmark-Node-title node)))))
       (cmark--HtmlRenderer-lit this "\" />"))))
 
 (defun cmark--HtmlRenderer-emph (this node entering)
@@ -230,7 +236,8 @@
                (> (length (car info_words)) 0))
       (push (cons "class"
                   (concat "language-"
-                          (cmark--HtmlRenderer-esc this (car info_words))))
+                          (funcall (cmark-HtmlRenderer-esc this)
+                                   (car info_words))))
             attrs))
     (cmark--HtmlRenderer-cr this)
     (cmark--HtmlRenderer-tag this "pre")
@@ -314,7 +321,7 @@
 ;;; Helper methods
 
 (defun cmark--HtmlRenderer-out (this s)
-  (cmark--HtmlRenderer-lit this (cmark--HtmlRenderer-esc this s)))
+  (cmark--HtmlRenderer-lit this (funcall (cmark-HtmlRenderer-esc this) s)))
 
 (defun cmark--HtmlRenderer-attrs (this node)
   (let ((att '())
@@ -338,9 +345,6 @@
 (defalias 'cmark-HtmlRenderer-render 'cmark-Renderer-render)
 (defalias 'cmark--HtmlRenderer-lit 'cmark--Renderer-lit)
 (defalias 'cmark--HtmlRenderer-cr 'cmark--Renderer-cr)
-
-(defun cmark--HtmlRenderer-esc (_this s)
-  (cmark--escapeXml s))
 
 (provide 'cmark-html)
 
