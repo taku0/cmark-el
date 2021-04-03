@@ -747,12 +747,22 @@ and 2 for \"we've dealt with this line completely, go to next.\"")
                    (blockType 1)
                    b)
                (while (<= blockType 7)
-                 (when (and (cmark--string-match
-                             (elt cmark--reHtmlBlockOpen blockType)
-                             s)
-                            (or (< blockType 7)
-                                (not (equal (cmark-Node-type container)
-                                            "paragraph"))))
+                 (when (and
+                        (cmark--string-match
+                         (elt cmark--reHtmlBlockOpen blockType)
+                         s)
+                        (or
+                         (< blockType 7)
+                         (and
+                          (not (equal (cmark-Node-type container) "paragraph"))
+                          ;; maybe lazy
+                          (not
+                           (and
+                            (not (cmark-Parser-allClosed parser))
+                            (not (cmark-Parser-blank parser))
+                            (equal
+                             (cmark-Node-type (cmark-Parser-tip parser))
+                             "paragraph"))))))
                    (cmark--Parser-closeUnmatchedBlocks parser)
                    ;; We don't adjust (cmark-Parser-offset parser)
                    ;; spaces are part of the HTML block:
